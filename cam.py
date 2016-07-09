@@ -547,10 +547,10 @@ def showImage(n):
 # Initialization -----------------------------------------------------------
 
 # Init framebuffer/touchscreen environment variables
-os.putenv('SDL_VIDEODRIVER', 'fbcon')
-os.putenv('SDL_FBDEV'      , '/dev/fb1')
-os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
-os.putenv('SDL_MOUSEDEV'   , '/dev/input/touchscreen')
+#os.putenv('SDL_VIDEODRIVER', 'fbcon')
+#os.putenv('SDL_FBDEV'      , '/dev/fb1')
+#os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
+#os.putenv('SDL_MOUSEDEV'   , '/dev/input/touchscreen')
 
 # Get user & group IDs for file & folder creation
 # (Want these to be 'pi' or other user, not root)
@@ -565,13 +565,16 @@ yuv = bytearray(320 * 240 * 3 / 2)
 
 # Init pygame and screen
 pygame.init()
-pygame.mouse.set_visible(False)
-screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+pygame.mouse.set_visible(True)
+screen_width=700
+screen_height=400
+screen = pygame.display.set_mode([screen_width,screen_height])
 
 # Init camera and set up default values
 camera            = picamera.PiCamera()
 atexit.register(camera.close)
 camera.resolution = sizeData[sizeMode][1]
+camera.annotate_text = 'Luisasadsada'
 #camera.crop       = sizeData[sizeMode][2]
 camera.crop       = (0.0, 0.0, 1.0, 1.0)
 # Leave raw format at default YUV, don't touch, don't set to RGB!
