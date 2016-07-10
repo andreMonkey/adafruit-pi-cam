@@ -38,7 +38,6 @@ import yuv2rgb
 from pygame.locals import *
 from subprocess import call  
 
-
 # UI classes ---------------------------------------------------------------
 
 # Small resistive touchscreen is best suited to simple tap interactions.
@@ -210,7 +209,6 @@ def sizeModeCallback(n): # Radio buttons on size settings screen
 	camera.resolution = sizeData[sizeMode][1]
 #	camera.crop       = sizeData[sizeMode][2]
 
-
 # Global stuff -------------------------------------------------------------
 
 screenMode      =  3      # Current screen mode; default = viewfinder
@@ -218,7 +216,7 @@ screenModePrior = -1      # Prior screen mode (for detecting changes)
 settingMode     =  4      # Last-used settings mode (default = storage)
 storeMode       =  0      # Storage mode; default = Photos folder
 storeModePrior  = -1      # Prior storage mode (for detecting changes)
-sizeMode        =  0      # Image size; default = Large
+sizeMode        =  2      # Image size; default = Large
 fxMode          =  0      # Image effect; default = Normal
 isoMode         =  0      # ISO settingl default = Auto
 iconPath        = 'icons' # Subdirectory containing UI bitmaps (PNG format)
@@ -473,7 +471,7 @@ def takePicture():
 
 	scaled = None
 	camera.resolution = sizeData[sizeMode][0]
-	camera.crop       = sizeData[sizeMode][2]
+	#camera.crop       = sizeData[sizeMode][2]
 	try:
 	  camera.capture(filename, use_video_port=False, format='jpeg',
 	    thumbnail=None)
@@ -499,14 +497,16 @@ def takePicture():
 	t.join()
 
 	if scaled:
-	  if scaled.get_height() < 240: # Letterbox
-	    screen.fill(0)
-	  screen.blit(scaled,
-	    ((320 - scaled.get_width() ) / 2,
-	     (240 - scaled.get_height()) / 2))
-	  pygame.display.update()
-	  time.sleep(2.5)
-	  loadIdx = saveIdx
+		  if scaled.get_height() < 240: # Letterbox
+		    screen.fill(0)
+		    screen.blit(scaled,
+			((320 - scaled.get_width() ) / 2,
+			 (240 - scaled.get_height()) / 2))
+		  pygame.display.update()
+		  time.sleep(2.5)
+		  loadIdx = saveIdx
+		  
+	execfile("../pixelsort/pixelsort.py")
 
 def showNextImage(direction):
 	global busy, loadIdx
@@ -574,10 +574,12 @@ screen = pygame.display.set_mode([screen_width,screen_height])
 camera            = picamera.PiCamera()
 atexit.register(camera.close)
 camera.resolution = sizeData[sizeMode][1]
-camera.annotate_text = 'Luisasadsada'
+camera.annotate_text = 'panino'
 #camera.crop       = sizeData[sizeMode][2]
-camera.crop       = (0.0, 0.0, 1.0, 1.0)
+#camera.crop       = (0.0, 0.0, 1.0, 1.0)
 # Leave raw format at default YUV, don't touch, don't set to RGB!
+
+#TODO save image as rgba so it doesnt need to be converted by pixelsort.py
 
 # Load all icons at startup.
 for file in os.listdir(iconPath):

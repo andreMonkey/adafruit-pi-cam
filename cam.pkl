@@ -10,5 +10,5 @@ p4
 I0
 sS'size'
 p5
-I0
+I2
 s.
