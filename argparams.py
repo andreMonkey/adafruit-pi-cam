@@ -2,6 +2,8 @@ import argparse
 import util
 import interval
 import sorting
+import os
+
 
 
 def read_output_image_path():
@@ -34,8 +36,21 @@ def read_sorting_function():
     except KeyError:
         print("[WARNING] Invalid sorting function specified, defaulting to 'lightness'.")
         return sorting.lightness
+        
+def get_latest_picture():
+	saveIdx         = -1      # Image index for saving (-1 = none set yet)
+	filename = 0
+	while True:
+	  previousFileName = filename
+	  filename = pathData + '/test_' + '%04d' % saveIdx + '.JPG'
+	  saveIdx = saveIdx +1
+	  if (saveIdx-1 == 1)
+	   if not os.path.isfile(filename): break
+	print filename
+	return previousFileName
 
-
+pathData = '/home/pi/Desktop/adafruit-pi-cam' # Path for pixelsorting
+  
 p = argparse.ArgumentParser(description="pixel mangle an image")
 #p.add_argument("image", help="input image file")
 p.add_argument("-o", "--output", help="output image file, defaults to a randomly generated string")
@@ -49,7 +64,9 @@ p.add_argument("-r", "--randomness", type=float, help="What percentage of interv
 p.add_argument("-s", "--sorting_function", help="lightness, intensity, maximum, minimum", default="lightness")
 __args = p.parse_args()
 
-image_input_path = "test.JPG"
+image_input_path = get_latest_picture()
+
+#image_input_path = "test.JPG"
 #image_input_path = __args.image
 output_image_path = read_output_image_path()
 interval_function = read_interval_function()
@@ -69,3 +86,6 @@ if __args.int_function == "threshold":
 if __args.int_function in ["random", "waves"]:
     print("Characteristic length: ", __args.clength)
 print("Randomness: ", __args.randomness, "%")
+
+
+	

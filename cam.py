@@ -255,9 +255,10 @@ fxData = [
   'washedout', 'emboss', 'cartoon', 'solarize' ]
 
 pathData = [
-  '/home/pi/Photos',     # Path for storeMode = 0 (Photos folder)
+  '/home/pi/Desktop/adafruit-pi-cam', # Path for storeMode = 0 (pixelsorting)
   '/boot/DCIM/CANON999', # Path for storeMode = 1 (Boot partition)
-  '/home/pi/Photos']     # Path for storeMode = 2 (Dropbox)
+  '/home/pi/Photos'      # Path for storeMode = 2 (Dropbox)
+    ]     
 
 icons = [] # This list gets populated at startup
 
@@ -461,7 +462,7 @@ def takePicture():
 
 	# Scan for next available image slot
 	while True:
-	  filename = pathData[storeMode] + '/IMG_' + '%04d' % saveIdx + '.JPG'
+	  filename = pathData[storeMode] + '/test_' + '%04d' % saveIdx + '.JPG'
 	  if not os.path.isfile(filename): break
 	  saveIdx += 1
 	  if saveIdx > 9999: saveIdx = 0
@@ -475,6 +476,7 @@ def takePicture():
 	try:
 	  camera.capture(filename, use_video_port=False, format='jpeg',
 	    thumbnail=None)
+	  print("took a picture")
 	  # Set image file ownership to pi user, mode to 644
 	  # os.chown(filename, uid, gid) # Not working, why?
 	  os.chmod(filename,
@@ -506,7 +508,7 @@ def takePicture():
 		  time.sleep(2.5)
 		  loadIdx = saveIdx
 		  
-	execfile("../pixelsort/pixelsort.py")
+	call(["python", "pixelsort.py"])
 
 def showNextImage(direction):
 	global busy, loadIdx
