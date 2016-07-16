@@ -1,10 +1,19 @@
+#!/usr/bin/env python
+
 import argparse
 import util
 import interval
 import sorting
 import os
+import explorerhat
+import signal
 
-
+def read_pin():
+    value = explorerhat.analog.one.read()
+    print("value", value)
+    mappedValue = (value / 5) * 100 # map value from poti (float between 0 and 5, to a percentage value)
+    print("mappedValue", mappedValue)
+    return (mappedValue)
 
 def read_output_image_path():
     return __args.output if __args.output else util.id_generator() + ".png"
@@ -50,8 +59,8 @@ def get_latest_picture():
         if not os.path.isfile(filename): break
     return previousFileName
 
-#pathData = '/home/pi/Desktop/adafruit-pi-cam' # Path for pixelsorting on raspberry pi
-pathData = '/home/monkey/Desktop/adafruit-pi-cam' # Path for pixelsorting on monkey computers
+pathData = '/home/pi/Desktop/adafruit-pi-cam' # Path for pixelsorting on raspberry pi
+#pathData = '/home/monkey/Desktop/adafruit-pi-cam' # Path for pixelsorting on monkey computers
 
   
 p = argparse.ArgumentParser(description="pixel mangle an image")
@@ -63,7 +72,7 @@ p.add_argument("-t", "--threshold", type=float, help="Pixels darker than this ar
 p.add_argument("-u", "--upper_threshold", type=float, help="Pixels darker than this are not sorted, between 0 and 1", default=0.8)
 p.add_argument("-c", "--clength", type=int, help="Characteristic length of random intervals", default=50)
 p.add_argument("-a", "--angle", type=float, help="Rotate the image by an angle (in degrees) before sorting", default=0)
-p.add_argument("-r", "--randomness", type=float, help="What percentage of intervals are NOT sorted", default=0)
+#p.add_argument("-r", "--randomness", type=float, help="What percentage of intervals are NOT sorted", default=0)
 p.add_argument("-s", "--sorting_function", help="lightness, intensity, maximum, minimum", default="lightness")
 __args = p.parse_args()
 
@@ -78,7 +87,9 @@ bottom_threshold = __args.threshold
 upper_threshold = __args.upper_threshold
 clength = __args.clength
 angle = __args.angle
-randomness = __args.randomness
+#randomness = __args.randomness
+randomness = read_pin()
+print("randomness factor", randomness)
 sorting_function = read_sorting_function()
 
 print("Interval function: ", __args.int_function)
@@ -88,7 +99,7 @@ if __args.int_function == "threshold":
     print("Upper threshold: ", __args.upper_threshold)
 if __args.int_function in ["random", "waves"]:
     print("Characteristic length: ", __args.clength)
-print("Randomness: ", __args.randomness, "%")
+print("Randomness: ", randomness, "%")
 
 
 	
