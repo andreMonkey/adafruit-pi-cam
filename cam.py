@@ -217,6 +217,13 @@ def read_pin():
     print("mappedValue", mappedValue)
     return (mappedValue)
 
+def read_digital_pin():
+    value = explorerhat.input.two.read()
+    print(" digital value", value)
+    return value
+
+
+
 # Global stuff -------------------------------------------------------------
 screenMode      =  3      # Current screen mode; default = viewfinder
 screenModePrior = -1      # Prior screen mode (for detecting changes)
@@ -520,7 +527,6 @@ def takePicture():
       pygame.display.update()
       time.sleep(2.5)
       loadIdx = saveIdx
-      
   call(["python", "pixelsort.py"])
 
 def showNextImage(direction):
@@ -617,20 +623,42 @@ loadSettings() # Must come last; fiddles with Button/Icon states
 # Main loop ----------------------------------------------------------------
 
 while(True):
+  # Look if digital button is pressed and take a picture or turn off Pi
+  time.sleep(0.001) # do not use all the cpu power
+  # make a loop to test for the button being pressed
+  #if button == pressed:
+  pressed = 0
+  pressed = read_digital_pin()
+  if pressed:
+    when_pressed = time.time()
+    while pressed:
+      # wait until the button is not pressed any more
+      time.sleep(0.001) # do not use all the cpu power
+      # measure the time
+    time_pressed = time.time() - when_pressed
+    if time_pressed < 2:
+      print("taking picture")
+      takePicture() # pressed too short do not use the other cases
+    if time_pressed > 4:
+      call("sudo halt -n") # turn of PI , when pressed for more than 4 seconds
+            
 
-  # Process touchscreen input
-  while True:
-    for event in pygame.event.get():
-      if(event.type is MOUSEBUTTONDOWN):
-        pos = pygame.mouse.get_pos()
-        for b in buttons[screenMode]:
-          if b.selected(pos): break
-    # If in viewfinder or settings modes, stop processing touchscreen
-    # and refresh the display to show the live preview.  In other modes
-    # (image playback, etc.), stop and refresh the screen only when
-    # screenMode changes.
-    if screenMode >= 3 or screenMode != screenModePrior: break
-
+   
+    # Process touchscreen input
+    while True:
+      for event in pygame.event.get():
+        if(event.type is MOUSEBUTTONDOWN):
+          pos = pygame.mouse.get_pos()
+          for b in buttons[screenMode]:
+            if b.selected(pos): break
+   #  If in viewfinder or settings modes, stop processing touchscreen
+#     and refresh the display to show the live preview.  In other modes
+ #    (image playback, etc.), stop and refresh the screen only when
+  #   screenMode changes.
+        if screenMode >= 3 or screenMode != screenModePrior: break
+   
+   
+    
   # Refresh display
   if screenMode >= 3: # Viewfinder or settings modes
     stream = io.BytesIO() # Capture into in-memory stream

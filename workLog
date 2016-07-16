@@ -1,0 +1,10 @@
+we made a digital button connected to digital input 2 on the phat
+now we want to take a picture in cam.py when button pressed 
+or turn off the PI when button pressed for long. 
+see lines 625ff in cam.py for most recent attempt. 
+
+things to do next time: 
+- what did pimoroni reply on the hackr email
+- make hackr work
+- make display work
+- make button work

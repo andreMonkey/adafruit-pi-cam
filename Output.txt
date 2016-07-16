@@ -1,3 +1,5 @@
 
 Filename: /home/pi/Desktop/adafruit-pi-cam/test_0014.JPG - value: 48.72
 Filename: /home/pi/Desktop/adafruit-pi-cam/test_0015.JPG - value: 48.72
+Filename: /home/pi/Desktop/adafruit-pi-cam/test_0001.JPG - value: 48.36
+Filename: /home/pi/Desktop/adafruit-pi-cam/test_0002.JPG - value: 48.72
