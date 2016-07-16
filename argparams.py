@@ -38,18 +38,21 @@ def read_sorting_function():
         return sorting.lightness
         
 def get_latest_picture():
-	saveIdx         = -1      # Image index for saving (-1 = none set yet)
-	filename = 0
-	while True:
-	  previousFileName = filename
-	  filename = pathData + '/test_' + '%04d' % saveIdx + '.JPG'
-	  saveIdx = saveIdx +1
-	  if (saveIdx-1 == 1)
-	   if not os.path.isfile(filename): break
-	print filename
-	return previousFileName
+    saveIdx         = -1      # Image index for saving (-1 = none set yet)
+    filename = 0
+    while True:
+      previousFileName = filename
+      filename = pathData + '/test_' + '%04d' % saveIdx + '.JPG'
+      saveIdx = saveIdx +1
+      print(filename)
+      print(os.path.isfile(filename))
+      if (saveIdx-1 >= 1):
+        if not os.path.isfile(filename): break
+    return previousFileName
 
-pathData = '/home/pi/Desktop/adafruit-pi-cam' # Path for pixelsorting
+#pathData = '/home/pi/Desktop/adafruit-pi-cam' # Path for pixelsorting on raspberry pi
+pathData = '/home/monkey/Desktop/adafruit-pi-cam' # Path for pixelsorting on monkey computers
+
   
 p = argparse.ArgumentParser(description="pixel mangle an image")
 #p.add_argument("image", help="input image file")
